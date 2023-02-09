@@ -3,6 +3,7 @@ input = sys.stdin.readline
 T = int(input().rstrip())
 for _ in range(T):
     H, W, N = list(map(int,input().split()))
+    flag = False
     for i in range(1, W+1):
         for j in range(1, H+1):
             N-=1
@@ -11,3 +12,7 @@ for _ in range(T):
                     print(str(j)+'0'+str(i))
                 else:
                     print(str(j)+str(i))
+                flag=True
+                break
+        if flag:
+            break
