@@ -1,61 +1,61 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.*;
+import java.io.*;
+import java.util.Arrays;
 
 public class Main {
-
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static int parent[] = new int[1000001];
-    public static void main(String[] args) throws IOException {
-        String str = br.readLine();
-        int []arr = Arrays.stream(str.split(" ")).mapToInt(Integer::parseInt).toArray();
-        int N = arr[0];
-        int M = arr[1];
-        for (int i = 0; i <= N; i++) {
-            parent[i] = -1;
-        }
-        for (int i = 0; i < M; i++) {
-            str = br.readLine();
-            arr = Arrays.stream(str.split(" ")).mapToInt(Integer::parseInt).toArray();
-            int op = arr[0];
-            int a = arr[1];
-            int b = arr[2];
-            if (op == 0) {
-                if (a != b){
-                    merge(a, b);
-                }
+    static int ret;
+    static int N, M;
+    static int In[];
+    static int par[];
+    static int rank[];
+    public static void main(String[] args)    throws IOException {
+        In = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        N = In[0];
+        M = In[1];
+        par = new int[N + 1];
+        rank = new int[N+1];
+        for(int i=1;i<=N;i++)
+            par[i] = i;
+
+        for(int i=0;i<M;i++) {
+            In = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            if (In[0] == 0) {
+                union(In[1], In[2]);
             } else {
-                if (a == b) {
-                    bw.write("YES\n");
-                    continue;
-                }
-                if (find(a) == find(b)) {
+                if (find(In[1]) == find(In[2])) {
                     bw.write("YES\n");
                 } else {
                     bw.write("NO\n");
                 }
             }
         }
-
         bw.flush();
         bw.close();
-        br.close();
-    }
-    public static int find(int vertex) {
-        if (parent[vertex] < 0) return vertex;
-        parent[vertex] = find(parent[vertex]);
-        return parent[vertex];
     }
 
-    public static void merge(int v1, int v2) {
-        int p1 = find(v1);
-        int p2 = find(v2);
-        if (p1 == p2) return;
-        parent[p1] += parent[p2]; // root size
-        parent[p2] = p1;
+    public static int find(int x) {
+        if (par[x] == x)
+            return x;
+        else {
+            par[x] = find(par[x]);
+            return find(par[x]);
+        }
+    }
+
+    public static void union(int x, int y) {
+
+        int A = find(x);
+        int B = find(y);
+        if (A == B)
+            return;
+        else if (rank[x] > rank[y]) {
+            par[B] = A;
+        } else if (rank[x] < rank[y]) {
+            par[A] = B;
+        } else if (rank[x] == rank[y]) {
+            par[B] = A;
+            rank[A]++;
+        }
     }
 }
