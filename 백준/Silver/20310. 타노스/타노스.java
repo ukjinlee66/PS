@@ -13,27 +13,39 @@ public class Main {
     
     public static void main(String[] args)    throws IOException {
         str = br.readLine();
-        zero = 0;
-        one = 0;
+        StringBuilder s = new StringBuilder();
         for(int i=0;i<str.length();i++) {
-            if (str.charAt(i) == '0') {
-                zero++;
-            } else {
-                one++;
+            s.append(str.charAt(i));
+        }
+        for(int i=0;i<s.length();i++) {
+            if (s.charAt(i) == '0') {
+                for(int j=s.length()-1;j>i;j--) {
+                    if (s.charAt(j) == '0') {
+                        s.setCharAt(j, '2');
+                        s.setCharAt(i, '3');
+                        break;
+                    }
+                }
+            } else if (s.charAt(i) == '1') {
+                for(int j=s.length()-1;j>i;j--) {
+                    if (s.charAt(j) == '1') {
+                        s.setCharAt(i, '2');
+                        s.setCharAt(j, '4');
+                        break;
+                    }
+                }
             }
         }
-        zero /=2;
-        one /= 2;
-        while (zero > 0) {
-            bw.write("0");
-            zero--;
-        }
-        while (one > 0) {
-            bw.write("1");
-            one--;
+        for(int i=0;i<s.length();i++) {
+            if (s.charAt(i) == '2')
+                continue;
+            if (s.charAt(i) == '3') {
+                bw.write("0");
+            } else if (s.charAt(i) == '4') {
+                bw.write("1");
+            }
         }
         bw.write("\n");
-        
         bw.flush();
         bw.close();
     }
